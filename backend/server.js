@@ -3,18 +3,14 @@ const app = express();
 const dotenv = require('dotenv');
 const colors = require('colors');
 const connectDB = require('./config/db');
-const cors = require('cors');
 const path = require('path');
 const productRoutes = require('./routes/productRoutes');
-const {
-  notFound,
-  erroHandler,
-  errorHandler,
-} = require('./middleware/errorMiddleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-app.use(cors());
+app.use(express.json());
 
 connectDB();
 
@@ -24,6 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
