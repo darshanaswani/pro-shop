@@ -8,10 +8,14 @@ const productRoutes = require('./routes/productRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const userRoutes = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes.js');
+const uploadRoutes = require('./routes/uploadRoutes');
+
+const cors = require('cors');
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 app.use(express.json());
+app.use(cors());
 
 connectDB();
 
@@ -26,6 +30,9 @@ app.use('/api/orders', orderRoutes);
 app.get('/api/config/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID);
 });
+app.use('/api/upload', uploadRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.use(notFound);
 app.use(errorHandler);
